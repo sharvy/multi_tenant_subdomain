@@ -61,42 +61,13 @@ module MultiTenantSubdomain
     end
 
     def create_initializer
-      initializer_path = Rails.root.join("config", "initializers", "multi_tenant_subdomain.rb")
+      initializer_file = "config/initializers/multi_tenant_subdomain.rb"
 
-      if File.exist?(initializer_path)
-        puts "X Initializer already exists. Skipping..."
-      else
-        template "multi_tenant_subdomain.rb", initializer_path
-      end
-    end
-
-    def remove_initializer
-      initializer_path = Rails.root.join("config", "initializers", "multi_tenant_subdomain.rb")
-      return unless File.exist?(initializer_path)
-
-      FileUtils.rm_f(initializer_path)
-      puts "X Removed initializer: config/initializers/multi_tenant_subdomain.rb"
-    end
-
-    def remove_model
-      model_path = Rails.root.join("app", "models", "#{model_name.underscore}.rb")
-      test_path = Rails.root.join("test", "models", "#{model_name.underscore}_test.rb")
-      spec_path = Rails.root.join("spec", "models", "#{model_name.underscore}_spec.rb")
-
-      [model_path, test_path, spec_path].each do |path|
-        FileUtils.rm_f(path) if File.exist?(path)
-      end
-
-      puts "X Removed model: #{model_name}"
-    end
-
-    def remove_migrations
-      migration_files = Dir.glob(Rails.root.join("db", "migrate", "*_#{model_name.tableize}.rb"))
-      migration_files.each do |file|
-        FileUtils.rm_f(file) if File.exist?(file)
-      end
-
-      puts "X Removed migrations related to #{model_name}"
+      create_file initializer_file, <<~RUBY
+        MultiTenantSubdomain.configure do |config|
+          config.tenant_model = "#{model_name}"
+        end
+      RUBY
     end
   end
 end

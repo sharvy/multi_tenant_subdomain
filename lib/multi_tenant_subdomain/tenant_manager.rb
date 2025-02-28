@@ -1,4 +1,9 @@
+# frozen_string_literal: true
+
 module MultiTenantSubdomain
+  # This class is used to manage the current tenant.
+  #
+  # It is used to ensure that all requests are scoped to a single tenant.
   class TenantManager
     MTS_KEY = :current_tenant
 
