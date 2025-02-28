@@ -36,29 +36,17 @@ bundle install
 
     ```ruby
     MultiTenantSubdomain.configure do |config|
-      config.tenant_model = "YourTenantModel"
+      config.tenant_model_class = "YourTenantModel" # Default: "Tenant"
+      config.tenant_model_table = "your_tenant_models" # Default: "tenants"
+      config.tenant_model_pk = "id" # Default: "id"
+      config.tenant_model_fk = "your_tenant_model_id" # Default: "tenant_id"
     end
     ```
 
-    Ensure `YourTenantModel` matches the name of your tenant model.
-
-## Configuration Options
-
-You can configure the following options in the initializer file `config/initializers/multi_tenant_subdomain.rb`:
-
-```ruby
-MultiTenantSubdomain.configure do |config|
-  config.tenant_model_class = "YourTenantModel" # Default: "Tenant"
-  config.tenant_model_table = "your_tenant_models" # Default: "tenants"
-  config.tenant_model_pk = "id" # Default: "id"
-  config.tenant_model_fk = "your_tenant_model_id" # Default: "tenant_id"
-end
-```
-
-- `tenant_model_class`: The class name of your tenant model.
-- `tenant_model_table`: The table name of your tenant model.
-- `tenant_model_pk`: The primary key of your tenant model.
-- `tenant_model_fk`: The foreign key used in other models to reference the tenant.
+    - `tenant_model_class`: The class name of your tenant model.
+    - `tenant_model_table`: The table name of your tenant model.
+    - `tenant_model_pk`: The primary key of your tenant model.
+    - `tenant_model_fk`: The foreign key used in other models to reference the tenant.
 
 ## ActiveRecord Scoping
 
