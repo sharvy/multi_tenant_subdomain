@@ -42,6 +42,41 @@ bundle install
 
     Ensure `YourTenantModel` matches the name of your tenant model.
 
+## Configuration Options
+
+You can configure the following options in the initializer file `config/initializers/multi_tenant_subdomain.rb`:
+
+```ruby
+MultiTenantSubdomain.configure do |config|
+  config.tenant_model_class = "YourTenantModel" # Default: "Tenant"
+  config.tenant_model_table = "your_tenant_models" # Default: "tenants"
+  config.tenant_model_pk = "id" # Default: "id"
+  config.tenant_model_fk = "your_tenant_model_id" # Default: "tenant_id"
+end
+```
+
+- `tenant_model_class`: The class name of your tenant model.
+- `tenant_model_table`: The table name of your tenant model.
+- `tenant_model_pk`: The primary key of your tenant model.
+- `tenant_model_fk`: The foreign key used in other models to reference the tenant.
+
+## ActiveRecord Scoping
+
+By default, all your ActiveRecord models are automatically scoped to the current tenant. This is achieved by adding a `default_scope` to your models that filters records based on the current tenant's ID.
+
+To ensure this works correctly, make sure your models have a foreign key column that references your tenant model (e.g., `account_id` if your tenant model is `Account`).
+
+If you need to bypass the tenant scoping for any reason, you can use the `without_tenant_scope` method:
+
+```ruby
+YourModel.without_tenant_scope do
+  # Your code here will bypass the tenant scoping
+  YourModel.all # Returns all records, regardless of the current tenant
+end
+```
+
+**Note:** Replace `YourModel` with the actual name of your model and `tenant` with the underscored name of your tenant model.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on [GitHub](https://github.com/sharvy/multi_tenant_subdomain).
